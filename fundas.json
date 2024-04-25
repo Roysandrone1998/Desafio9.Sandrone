@@ -1,0 +1,22 @@
+[
+    {
+        "nombre": "Funda básica",
+        "categoria": "Básica",
+        "precio": 10.99
+        },
+        {
+        "nombre": "Funda de lujo",
+        "categoria": "Premium",
+        "precio": 29.99
+        },
+        {
+        "nombre": "Funda resistente al agua",
+        "categoria": "Resistente",
+        "precio": 19.99
+        },
+        {
+        "nombre": "Funda con diseño exclusivo",
+        "categoria": "Exclusiva",
+        "precio": 15.99
+        }
+    ]
