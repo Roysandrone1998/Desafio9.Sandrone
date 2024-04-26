@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const schema = new mongoose.Schema({
+const fundaSchema = new mongoose.Schema({
     nombre:String,
     categoria: String, 
     precio: Number
 })
 
-const JugueteModel = mongoose.model("fundas", schema);
+const FundaModel = mongoose.model("fundas", fundaSchema);
 
 module.exports = FundaModel;
