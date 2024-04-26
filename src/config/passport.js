@@ -1,41 +1,32 @@
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const UserModel = require("../models/user.model");
+const jwt = require("passport-jwt");
+const JWTStrategy = jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
+const UserModel = require("../models/user.model.js");
 
-passport.use(
-    new LocalStrategy(async (username, password, done) => {
+const initializePassport = () => {
+    passport.use("jwt", new JWTStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]), 
+        secretOrKey: "coderhouse"
+    }, async (jwt_payload, done) => {
         try {
-        const user = await UserModel.findOne({ email: username });
-
-        if (!user) {
-            return done(null, false, { message: "Usuario no encontrado" });
-        }
-
-        const match = await bcrypt.compare(password, user.password);
-
-        if (match) {
-            return done(null, user);
-        } else {
-            return done(null, false, { message: "Contraseña incorrecta" });
-        }
+            const user = await UserModel.findById(jwt_payload.user._id);
+            if (!user) {
+                return done(null, false);
+            }
+            return done(null, user); 
         } catch (error) {
-        return done(error);
+            return done(error);
         }
-    })
-    );
+    }));
+}
 
-    passport.serializeUser((user, done) => {
-    done(null, user.id);
-    });
-
-    passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await UserModel.findById(id);
-        done(null, user);
-    } catch (error) {
-        done(error);
+const cookieExtractor = (req) => {
+    let token = null;
+    if(req && req.cookies) {
+        token = req.cookies["superContra"]
     }
-});
+    return token;
+}
 
-module.exports = passport;
+module.exports = initializePassport;

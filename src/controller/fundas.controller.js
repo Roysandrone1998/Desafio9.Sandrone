@@ -1,22 +1,23 @@
-const FundaService = require("../services/fundas.services.js");
-const fundaService = new FundaService(); 
+const FundaRepository = require("../repositories/funda.repository.js");
+const fundaRepository = new FundaRepository(); 
 
-class fundaController {
-    async crearFunda(req, res) {
+class FundaController {
+    async getFundas(req, res) {
         try {
-            const funda = await fundaService.crearFunda(req.body);
-            res.json(funda);
+            const fundas = await fundaRepository.traerTodo();
+            res.status(200).json(fundas);
         } catch (error) {
-            res.status(500).json({error: "No se puede crear el funda"});
+            res.status(500).json("Error del servidor");
         }
     }
 
-    async obtenerFundas(req, res) {
+    async postFundas(req, res) {
+        const nuevoFunda = req.body;
         try {
-            const fundas = await fundaService.obtenerFundas();
-            res.json(fundas);
+            await fundaRepository.crear(nuevoFunda);
+            res.status(200).send("funda creada");
         } catch (error) {
-            res.status(500).json({error: "No se pueden obtener las fundas"});
+            res.status(500).json("Error del servidor");
         }
     }
 }
